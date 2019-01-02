@@ -18,11 +18,12 @@ import (
 )
 
 type Flags struct {
-	Pkg     string   `names:"--pkg" usage:"result file package name, directory name is used by default"`
-	Output  string   `names:"-o, --output" usage:"output file"`
-	Prefix  string   `names:"--prefix" usage:"remove path prefix, default current directory"`
-	Ignores []string `names:"--ignore" usage:"ignore file pattern"`
-	Paths   []string `names:"--path" usage:"embed file path"`
+	Pkg           string   `names:"--pkg" usage:"result file package name, directory name is used by default"`
+	Output        string   `names:"-o, --output" usage:"output file"`
+	IgnoreModTime bool     `names:"--ignore-modtime" usage:"ignore file/directory modify time"`
+	Prefix        string   `names:"--prefix" usage:"remove path prefix, default current directory"`
+	Ignores       []string `names:"--ignore" usage:"ignore file pattern"`
+	Paths         []string `names:"--path" usage:"embed file path"`
 }
 
 type EmbedFile struct {
@@ -93,11 +94,13 @@ func main() {
 			return err
 		}
 		f := EmbedFile{
-			Path:        path,
-			Size:        info.Size(),
-			Mode:        uint32(info.Mode()),
-			ModTimeUnix: info.ModTime().Unix(),
-			IsDir:       info.IsDir(),
+			Path:  path,
+			Size:  info.Size(),
+			Mode:  uint32(info.Mode()),
+			IsDir: info.IsDir(),
+		}
+		if !flags.IgnoreModTime {
+			f.ModTimeUnix = info.ModTime().Unix()
 		}
 		if !info.IsDir() {
 			fd, err := localFs.Open(path)
