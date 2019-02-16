@@ -21,7 +21,7 @@ type Flags struct {
 	Pkg           string   `names:"--pkg" usage:"result file package name, directory name is used by default"`
 	Output        string   `names:"-o, --output" usage:"output file"`
 	IgnoreModTime bool     `names:"--ignore-modtime" usage:"ignore file/directory modify time"`
-	Prefix        string   `names:"--prefix" usage:"remove path prefix, default current directory"`
+	Prefix        string   `names:"--prefix" usage:"remove path prefix, default none"`
 	Ignores       []string `names:"--ignore" usage:"ignore file pattern"`
 	Paths         []string `names:"--path" usage:"embed file path"`
 }
@@ -63,14 +63,14 @@ var Fs embedres.Fs = embedFs
 func init() {
 	{{- range $f := .Files }}
 	embedFs.Add(
-		"{{$f.Path}}", 
-		{{$f.Size}}, 
-		{{$f.Mode}}, 
-		time.Unix({{$f.ModTimeUnix}}, 0).In(time.Local), 
-		{{$f.IsDir}}, 
-		{{- if $f.IsDir }} 
+		"{{$f.Path}}",
+		{{$f.Size}},
+		{{$f.Mode}},
+		time.Unix({{$f.ModTimeUnix}}, 0).In(time.Local),
+		{{$f.IsDir}},
+		{{- if $f.IsDir }}
 		nil,
-		{{- else }} 
+		{{- else }}
 		func() (io.ReadCloser, error) {return gzip.NewReader(strings.NewReader({{$f.Content | formatBytes }}))},
 		{{- end }}
 	)
