@@ -19,6 +19,7 @@ import (
 
 type Flags struct {
 	Pkg           string   `names:"--pkg" usage:"result file package name, directory name is used by default"`
+	Var           string   `names:"--var" usage:"exposed fs variable name" default:"Fs"`
 	Output        string   `names:"-o, --output" usage:"output file"`
 	IgnoreModTime bool     `names:"--ignore-modtime" usage:"ignore file/directory modify time"`
 	Prefix        string   `names:"--prefix" usage:"remove path prefix, default none"`
@@ -36,6 +37,7 @@ type EmbedFile struct {
 }
 type RenderData struct {
 	Package string
+	Var     string
 	Imports []string
 	Files   []EmbedFile
 }
@@ -57,10 +59,8 @@ import (
 		"{{ . }}"
 	{{- end }}
 )
-var embedFs = embedres.NewEmbedFs()
-var Fs embedres.Fs = embedFs
-
-func init() {
+var {{.Var}} = (func () embedres.Fs {
+	var embedFs = embedres.NewEmbedFs()
 	{{- range $f := .Files }}
 	embedFs.Add(
 		"{{$f.Path}}",
@@ -75,7 +75,8 @@ func init() {
 		{{- end }}
 	)
 	{{- end }}
-}
+	return embedFs
+})()
 `
 
 func main() {
@@ -140,6 +141,7 @@ func main() {
 	}
 
 	renderData.Package = flags.Pkg
+	renderData.Var = flags.Var
 	if renderData.Package == "" {
 		renderData.Package = filepath.Base(absdir)
 	}
