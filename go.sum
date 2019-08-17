@@ -1,4 +1,4 @@
 github.com/cosiner/argv v0.0.1 h1:2iAFN+sWPktbZ4tvxm33Ei8VY66FPCxdOxpncUGpAXE=
 github.com/cosiner/argv v0.0.1/go.mod h1:p/NrK5tF6ICIly4qwEDsf6VDirFiWWz0FenfYBwJaKQ=
-github.com/cosiner/flag v0.2.1 h1:8oNOVIt3AQlrondUtnaLMB9ehQF2eANBMisvBTc1+xQ=
-github.com/cosiner/flag v0.2.1/go.mod h1:LI+VTFCMaFTuRo2IcvG4Dg3ylpJm9MsEhEzsx1PAyzA=
+github.com/cosiner/flag v0.3.2 h1:NfG5q2BRcdgeT1+uK55pN8pcJ7shAc6UI6PXpSLHYx4=
+github.com/cosiner/flag v0.3.2/go.mod h1:LI+VTFCMaFTuRo2IcvG4Dg3ylpJm9MsEhEzsx1PAyzA=
